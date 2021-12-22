@@ -62,24 +62,6 @@ public class LinkedList {
             new_node.next = list.head;
             list.head = new_node;
         }
-        void printReverse(Node head,int count,int lastYear){
-        if (head == null) return;
-
-        int currentYear= head.year;
-
-        if(currentYear!= lastYear){
-            System.out.println("\nYEAR "+head.year+"\n");
-        }System.out.print(new DatasetHandler().getMonths().get(head.month) + ": ");
-
-        for(int element: head.values){
-            System.out.print(element+"  ");
-        }
-        if(count%3==0){
-            System.out.println("\n");
-        }printReverse(head.next,++count,currentYear);
-
-
-        }
 
         // **************TRAVERSAL**************
 
@@ -98,7 +80,7 @@ public class LinkedList {
                 }
                 for(int i=1;i<25;i++){
                     if(i==1){
-                        stack.deleteTop(stack,0,i);;
+                        stack.deleteTop(stack,0,i);
                     }else if(i<=13){
                         stack.deleteTop(stack,2,i);
                     }else{

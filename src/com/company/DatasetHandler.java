@@ -3,44 +3,6 @@ package com.company;
 import java.util.*;
 
 public class DatasetHandler {
-    /*public void sortList(LinkedList dataset)
-    {
-
-        // Node current will point to head
-        LinkedList.Node current = dataset.head, index;
-
-        int[] temp;
-        int lastYear=current.year;
-        if (dataset.head == null) {
-            return;
-        }
-        else {
-            while (current != null) {
-                // Node index will point to node next to
-                // current
-                index = current.next;
-
-                while (index != null) {
-                    // If current node's data is greater
-                    // than index's node data, swap the data
-                    // between them
-                    if (lastYear== index.year){
-                        if (Arrays.stream(current.values).sorted().sum() > Arrays.stream(index.values).sum()) {
-                            temp = current.values;
-                            current.values = index.values;
-                            current.month= index.month;
-                            current.year = index.year;
-                            index.values = temp;
-                        }
-                    }
-
-
-                    index = index.next;
-                }
-                current = current.next;
-            }
-        }
-    }*/
 
     public void changeElement(LinkedList dataset,int month,int year,int value,int new_value){
         LinkedList.Node temp =dataset.head;
@@ -72,7 +34,7 @@ public class DatasetHandler {
         System.out.println("Dataset "+dataset.id+" doesn't contain the value "+ value);
     }
     public HashMap<Integer,String> getMonths(){
-        HashMap<Integer,String> months = new HashMap<Integer,String>();
+        HashMap<Integer,String> months = new HashMap<>();
         months.put(1,"January");
         months.put(2,"February");
         months.put(3,"March");
@@ -98,7 +60,7 @@ public class DatasetHandler {
         }
 
         LinkedList new_dataset = new LinkedList(datasetNumber);
-        int value = 0;
+        int value;
 
         for(int y=1;y<=2;y++){
             System.out.println("YEAR "+ y);

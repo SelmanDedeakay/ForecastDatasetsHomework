@@ -4,6 +4,31 @@ import java.util.*;
 
 
 public class Main {
+    public static int selectDataset(ArrayList<LinkedList> datasets,Scanner input ,ArrayList<Integer> dataset_ids){
+
+        while(true){
+            try{
+                System.out.println("\nSelect the dataset.");
+                for (LinkedList dataset : datasets) {
+                    System.out.println("-Dataset " + dataset.id);
+                }System.out.print("\n--->");
+                int selected = input.nextInt();
+                while(!dataset_ids.contains(selected)){
+                    System.out.print("""
+                            This dataset number is not available.
+                            
+                            Please enter a valid number.
+                            
+                            --->""");
+                    selected =input.nextInt();
+                }return selected;
+
+            }catch (Exception e){
+                System.out.println("\nPlease enter an Integer.");
+                input.nextLine();
+            }
+        }
+    }
     public static void ImportPreDefinedDatasets(LinkedList dataset1,LinkedList dataset2){
 
         //Pre-Defined Datasets
@@ -69,13 +94,15 @@ public class Main {
         Scanner input =new Scanner(System.in);
         DatasetHandler handler = new DatasetHandler();
         ArrayList<LinkedList> datasets = new ArrayList<>();
+        ArrayList<Integer> dataset_ids = new ArrayList<>();
         LinkedList dataset1 = new LinkedList(1);
         LinkedList dataset2 = new LinkedList(2);
         datasets.add(dataset1);
         datasets.add(dataset2);
+        dataset_ids.add(dataset1.id);
+        dataset_ids.add(dataset2.id);
         ImportPreDefinedDatasets(dataset1,dataset2);
         while(true){
-
             try {
                 System.out.print("""
                     \nPlease select an operation below.
@@ -96,6 +123,7 @@ public class Main {
                 if(choice==1){
                     LinkedList dataset = handler.InsertNewDataset(dataset_number,input);
                     datasets.add(dataset);
+                    dataset_ids.add(dataset.id);
                     dataset_number++;
                 }else if(choice==2){
                     handler.listDatasets(datasets);
@@ -103,51 +131,29 @@ public class Main {
                     if (datasets.isEmpty()) {
                         System.out.println("\nNo datasets available.\n");
                     } else {
-                        System.out.println("Select a dataset to delete.");
-                        for (LinkedList dataset : datasets) {
-                            System.out.println("-Dataset " + dataset.id);
-                        }
-                        System.out.print("--->");
-                        int deleted = input.nextInt();
-                        if(deleted > datasets.size() || deleted<=0) {
-                            System.out.println("This dataset number is not available.");
-                        }else{
+                        int deleted = selectDataset(datasets,input,dataset_ids);
+
                             for(int i = 0;i< datasets.size();i++){
                                 if(deleted == datasets.get(i).id){
                                     datasets.remove(i);
+                                    dataset_ids.remove(deleted-1);
                                 }
                             }
                             System.out.println("Dataset deleted.");
                         }
-
-                    }
                 }
                 else if(choice==4){
-                    System.out.println("\nSelect a dataset to find minimum value.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0) {
-                        System.out.println("This dataset number is not available.");
-                    }else{
-                        for(LinkedList dataset :datasets){
+                    int selected = selectDataset(datasets,input,dataset_ids);
+                    for(LinkedList dataset :datasets){
                             if (dataset.id==selected){
                                 HashMap<Integer,String> min = handler.findMin(dataset);
                                 System.out.println("\nThe minimum value of Dataset "+ dataset.id+"\nIn "+min.get(min.keySet().toArray()[0])+" : "+min.keySet().toArray()[0]+"\n");
                             }
                         }
                     }
+                else if(choice==5){
+                    int selected = selectDataset(datasets,input,dataset_ids);
 
-                }else if(choice==5){
-                    System.out.println("\nSelect a dataset to find minimum value.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0) {
-                        System.out.println("This dataset number is not available.");
-                    }else{
                         for(LinkedList dataset :datasets){
                             if (dataset.id==selected){
                                 HashMap<Integer,String> max = handler.findMax(dataset);
@@ -155,18 +161,8 @@ public class Main {
                             }
                         }
                     }
-
-                }
                 else if(choice==6) {
-                    System.out.println("\nSelect the dataset to search for.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0) {
-                        System.out.println("This dataset number is not available.");
-                    }
-                    else{
+                    int selected = selectDataset(datasets,input,dataset_ids);
                         System.out.print("\nEnter the value you searching for: \n\n--->");
                         int value = input.nextInt();
                         for(LinkedList dataset :datasets){
@@ -175,17 +171,8 @@ public class Main {
                             }
                         }
                     }
-
-
-                }else if(choice==7) {
-                    System.out.println("\nSelect the dataset.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0){
-                        System.out.println("This dataset number is not available.");
-                    }else{
+                else if(choice==7) {
+                    int selected = selectDataset(datasets,input,dataset_ids);
                         LinkedList dataset2change = null;
                         for(LinkedList dataset: datasets){
                             if(selected == dataset.id){
@@ -211,33 +198,17 @@ public class Main {
                         handler.changeElement(dataset2change,month,year,value,new_value);
 
                     }
-
-                }
                 else if (choice==8){
-                    System.out.println("\nSelect the dataset.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0){
-                        System.out.println("This dataset number is not available.");
-                    }else{
+                    int selected = selectDataset(datasets,input,dataset_ids);
+
                         for(LinkedList dataset: datasets){
                             if(selected == dataset.id){
                                 dataset.printList(dataset,true);
                             }
                         }
-                    }
                 }
                 else if(choice==9){
-                    System.out.println("\nSelect the dataset.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0){
-                        System.out.println("This dataset number is not available.");
-                    }else{
+                    int selected = selectDataset(datasets,input,dataset_ids);
                         LinkedList dataset2forecast = null;
                         for(LinkedList dataset: datasets){
                             if(selected == dataset.id){
@@ -278,18 +249,8 @@ public class Main {
                             System.out.println("\nBased on the MSE comparisons, the best method for this data is Deseasonalized Regression Analysis with value "+ deseasonalized);
                             ForecastingMethods.deseasonalizedRegression(dataset2forecast,true,false,false);
                         }
-                    }
-
-
                 }else if(choice==10){
-                    System.out.println("\nSelect the dataset.");
-                    for (LinkedList dataset : datasets) {
-                        System.out.println("-Dataset " + dataset.id);
-                    }System.out.print("\n--->");
-                    int selected = input.nextInt();
-                    if(selected > datasets.size() || selected<=0){
-                        System.out.println("This dataset number is not available.");
-                    }else{
+                    int selected = selectDataset(datasets,input,dataset_ids);
                         LinkedList dataset2forecast = null;
                         for(LinkedList dataset: datasets){
                             if(selected == dataset.id){
@@ -321,7 +282,6 @@ public class Main {
                         }
 
                     }
-                }
                 else if(choice==11){
                     System.out.println("Exiting...");
                     break;
