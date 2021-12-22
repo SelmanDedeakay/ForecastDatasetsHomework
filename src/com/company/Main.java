@@ -74,10 +74,10 @@ public class Main {
         datasets.add(dataset1);
         datasets.add(dataset2);
         ImportPreDefinedDatasets(dataset1,dataset2);
-
-
         while(true){
-            System.out.print("""
+
+            try {
+                System.out.print("""
                     \nPlease select an operation below.
                     1- Insert a New Dataset
                     2- Display Existing Datasets
@@ -92,200 +92,249 @@ public class Main {
                     11- Exit
                     
                     --->""");
-            int choice = input.nextInt();
-            if(choice==1){
-                LinkedList dataset = handler.InsertNewDataset(dataset_number,input);
-                datasets.add(dataset);
-                dataset_number++;
-            }else if(choice==2){
-                handler.listDatasets(datasets);
-            }else if(choice==3) {
-                if (datasets.isEmpty()) {
-                    System.out.println("\nNo datasets available.\n");
-                } else {
-                    System.out.println("Select a dataset to delete.");
+                int choice = input.nextInt();
+                if(choice==1){
+                    LinkedList dataset = handler.InsertNewDataset(dataset_number,input);
+                    datasets.add(dataset);
+                    dataset_number++;
+                }else if(choice==2){
+                    handler.listDatasets(datasets);
+                }else if(choice==3) {
+                    if (datasets.isEmpty()) {
+                        System.out.println("\nNo datasets available.\n");
+                    } else {
+                        System.out.println("Select a dataset to delete.");
+                        for (LinkedList dataset : datasets) {
+                            System.out.println("-Dataset " + dataset.id);
+                        }
+                        System.out.print("--->");
+                        int deleted = input.nextInt();
+                        if(deleted > datasets.size() || deleted<=0) {
+                            System.out.println("This dataset number is not available.");
+                        }else{
+                            for(int i = 0;i< datasets.size();i++){
+                                if(deleted == datasets.get(i).id){
+                                    datasets.remove(i);
+                                }
+                            }
+                            System.out.println("Dataset deleted.");
+                        }
+
+                    }
+                }
+                else if(choice==4){
+                    System.out.println("\nSelect a dataset to find minimum value.");
                     for (LinkedList dataset : datasets) {
                         System.out.println("-Dataset " + dataset.id);
-                    }
-                    System.out.print("--->");
-                    int deleted = input.nextInt();
-                    for(int i = 0;i< datasets.size();i++){
-                        if(deleted == datasets.get(i).id){
-                            datasets.remove(i);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0) {
+                        System.out.println("This dataset number is not available.");
+                    }else{
+                        for(LinkedList dataset :datasets){
+                            if (dataset.id==selected){
+                                HashMap<Integer,String> min = handler.findMin(dataset);
+                                System.out.println("\nThe minimum value of Dataset "+ dataset.id+"\nIn "+min.get(min.keySet().toArray()[0])+" : "+min.keySet().toArray()[0]+"\n");
+                            }
                         }
                     }
-                    System.out.println("Dataset deleted.");
-                }
-            }
-            else if(choice==4){
-                System.out.println("\nSelect a dataset to find minimum value.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                for(LinkedList dataset :datasets){
-                    if (dataset.id==selected){
-                        HashMap<Integer,String> min = handler.findMin(dataset);
-                        System.out.println("\nThe minimum value of Dataset "+ dataset.id+"\nIn "+min.get(min.keySet().toArray()[0])+" : "+min.keySet().toArray()[0]+"\n");
-                    }
-                }
-            }else if(choice==5){
-                System.out.println("\nSelect a dataset to find minimum value.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                for(LinkedList dataset :datasets){
-                    if (dataset.id==selected){
-                        HashMap<Integer,String> max = handler.findMax(dataset);
-                        System.out.println("\nThe maximum value of Dataset "+ dataset.id+"\nIn "+max.get(max.keySet().toArray()[0])+" : "+max.keySet().toArray()[0]+"\n");
-                    }
-                }
-            }
-            else if(choice==6) {
-                System.out.println("\nSelect the dataset to search for.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                System.out.print("\nEnter the value you searching for: \n\n--->");
-                int value = input.nextInt();
-                for(LinkedList dataset :datasets){
-                    if (dataset.id==selected) {
-                        handler.searchValue(value, dataset);
-                    }
-                }
 
-            }else if(choice==7) {
-                System.out.println("\nSelect the dataset.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                LinkedList dataset2change = null;
-                for(LinkedList dataset: datasets){
-                    if(selected == dataset.id){
-                        dataset.printList(dataset,false);
-                        dataset2change = dataset;
+                }else if(choice==5){
+                    System.out.println("\nSelect a dataset to find minimum value.");
+                    for (LinkedList dataset : datasets) {
+                        System.out.println("-Dataset " + dataset.id);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0) {
+                        System.out.println("This dataset number is not available.");
+                    }else{
+                        for(LinkedList dataset :datasets){
+                            if (dataset.id==selected){
+                                HashMap<Integer,String> max = handler.findMax(dataset);
+                                System.out.println("\nThe maximum value of Dataset "+ dataset.id+"\nIn "+max.get(max.keySet().toArray()[0])+" : "+max.keySet().toArray()[0]+"\n");
+                            }
+                        }
                     }
-                }System.out.print("Enter the Year You Want to Replace Value From:\n-Year 1\n-Year 2\n--->");
-                int year= input.nextInt();
-                System.out.print("Enter the Month You Want to Replace Value From:\n");
 
-                for(int i = 1;i<handler.getMonths().size()+1;i++){
-                    System.out.print(i+"-"+handler.getMonths().get(i)+"   ");
-                    if(i%3==0){
-                        System.out.println("\n");
+                }
+                else if(choice==6) {
+                    System.out.println("\nSelect the dataset to search for.");
+                    for (LinkedList dataset : datasets) {
+                        System.out.println("-Dataset " + dataset.id);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0) {
+                        System.out.println("This dataset number is not available.");
+                    }
+                    else{
+                        System.out.print("\nEnter the value you searching for: \n\n--->");
+                        int value = input.nextInt();
+                        for(LinkedList dataset :datasets){
+                            if (dataset.id==selected) {
+                                handler.searchValue(value, dataset);
+                            }
+                        }
+                    }
+
+
+                }else if(choice==7) {
+                    System.out.println("\nSelect the dataset.");
+                    for (LinkedList dataset : datasets) {
+                        System.out.println("-Dataset " + dataset.id);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0){
+                        System.out.println("This dataset number is not available.");
+                    }else{
+                        LinkedList dataset2change = null;
+                        for(LinkedList dataset: datasets){
+                            if(selected == dataset.id){
+                                dataset.printList(dataset,false);
+                                dataset2change = dataset;
+                            }
+                        }System.out.print("Enter the Year You Want to Replace Value From:\n-Year 1\n-Year 2\n--->");
+                        int year= input.nextInt();
+                        System.out.print("Enter the Month You Want to Replace Value From:\n");
+
+                        for(int i = 1;i<handler.getMonths().size()+1;i++){
+                            System.out.print(i+"-"+handler.getMonths().get(i)+"   ");
+                            if(i%3==0){
+                                System.out.println("\n");
+                            }
+                        }
+
+                        int month= input.nextInt();
+                        System.out.print("Enter the Value Do You Want to Replace:\n--->");
+                        int value= input.nextInt();
+                        System.out.print("Enter the Value You Want to Replace With "+value+":\n--->");
+                        int new_value= input.nextInt();
+                        handler.changeElement(dataset2change,month,year,value,new_value);
+
+                    }
+
+                }
+                else if (choice==8){
+                    System.out.println("\nSelect the dataset.");
+                    for (LinkedList dataset : datasets) {
+                        System.out.println("-Dataset " + dataset.id);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0){
+                        System.out.println("This dataset number is not available.");
+                    }else{
+                        for(LinkedList dataset: datasets){
+                            if(selected == dataset.id){
+                                dataset.printList(dataset,true);
+                            }
+                        }
                     }
                 }
+                else if(choice==9){
+                    System.out.println("\nSelect the dataset.");
+                    for (LinkedList dataset : datasets) {
+                        System.out.println("-Dataset " + dataset.id);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0){
+                        System.out.println("This dataset number is not available.");
+                    }else{
+                        LinkedList dataset2forecast = null;
+                        for(LinkedList dataset: datasets){
+                            if(selected == dataset.id){
+                                dataset2forecast = dataset;
+                            }
+                        }
+                        double exponential =
+                                ForecastingMethods.exponentialSmoothing(dataset2forecast,false,false,false);
+                        double doubleExponential =
+                                ForecastingMethods.doubleExponential(dataset2forecast,false,false,false);
+                        double regression =
+                                ForecastingMethods.regressionAnalysis(dataset2forecast,false,false,false);
+                        double deseasonalized =
+                                ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,false);
+                        double best_method = Arrays.stream(new double[]{exponential,doubleExponential,regression,deseasonalized}).min()
+                                .getAsDouble();
 
-                int month= input.nextInt();
-                System.out.print("Enter the Value Do You Want to Replace:\n--->");
-                int value= input.nextInt();
-                System.out.print("Enter the Value You Want to Replace With "+value+":\n--->");
-                int new_value= input.nextInt();
-                handler.changeElement(dataset2change,month,year,value,new_value);
-
-            }
-            else if (choice==8){
-                System.out.println("\nSelect the dataset.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                for(LinkedList dataset: datasets){
-                    if(selected == dataset.id){
-                        dataset.printList(dataset,true);
+                        for(int method =1;method<5;method++){
+                            if(method==1){
+                                System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
+                            }else if(method ==2){
+                                System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
+                            }else if(method ==3){
+                                System.out.println("\nMSE of Regression Analysis : "+ regression);
+                            }else {
+                                System.out.println("\nMSE of Deseasonalized Regression Analysis : "+ deseasonalized);
+                            }
+                        }if(best_method==exponential){
+                            System.out.println("\nBased on the MSE comparisons, the best method for this data is Exponential Smoothing Method with value "+exponential);
+                            ForecastingMethods.exponentialSmoothing(dataset2forecast,true,false,false);
+                        }else if(best_method==doubleExponential){
+                            System.out.println("\nBased on the MSE comparisons, the best method for this data is Double-Exponential Smoothing Method with value "+doubleExponential);
+                            ForecastingMethods.doubleExponential(dataset2forecast,true,false,false);
+                        }else if(best_method == regression){
+                            System.out.println("\nBased on the MSE comparisons, the best method for this data is Regression Analysis with value "+ regression);
+                            ForecastingMethods.regressionAnalysis(dataset2forecast,true,false,false);
+                        }else{
+                            System.out.println("\nBased on the MSE comparisons, the best method for this data is Deseasonalized Regression Analysis with value "+ deseasonalized);
+                            ForecastingMethods.deseasonalizedRegression(dataset2forecast,true,false,false);
+                        }
                     }
-            }}
-            else if(choice==9){
-                System.out.println("\nSelect the dataset.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                LinkedList dataset2forecast = null;
-                for(LinkedList dataset: datasets){
-                    if(selected == dataset.id){
-                        dataset2forecast = dataset;
+
+
+                }else if(choice==10){
+                    System.out.println("\nSelect the dataset.");
+                    for (LinkedList dataset : datasets) {
+                        System.out.println("-Dataset " + dataset.id);
+                    }System.out.print("\n--->");
+                    int selected = input.nextInt();
+                    if(selected > datasets.size() || selected<=0){
+                        System.out.println("This dataset number is not available.");
+                    }else{
+                        LinkedList dataset2forecast = null;
+                        for(LinkedList dataset: datasets){
+                            if(selected == dataset.id){
+                                dataset2forecast = dataset;
+                            }
+                        }
+                        for(int method =1;method<5;method++){
+                            if(method==1){
+                                System.out.println("\nMinimum Forecasted Sales Number of Exponential Smoothing Method : "
+                                        + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,true,false));
+                                System.out.println("\nMaximum Forecasted Sales Number of Exponential Smoothing Method : "
+                                        + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,false,true));
+                            }else if(method ==2){
+                                System.out.println("\nMinimum Forecasted Sales Number of Double-Exponential Smoothing Method : "
+                                        + ForecastingMethods.doubleExponential(dataset2forecast,false,true,false));
+                                System.out.println("\nMaximum Forecasted Sales Number of Double-Exponential Smoothing Method : "
+                                        + ForecastingMethods.doubleExponential(dataset2forecast,false,false,true));
+                            }else if(method ==3){
+                                System.out.println("\nMinimum Forecasted Sales Number of Regression Analysis : "
+                                        + ForecastingMethods.regressionAnalysis(dataset2forecast,false,true,false));
+                                System.out.println("\nMaximum Forecasted Sales Number of Regression Analysis : "
+                                        + ForecastingMethods.regressionAnalysis(dataset2forecast,false,false,true));
+                            }else {
+                                System.out.println("\nMinimum Forecasted Sales Number of Deseasonalized Regression Analysis : "
+                                        + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,true,false));
+                                System.out.println("\nMaximum Forecasted Sales Number of Deseasonalized Regression Analysis : "
+                                        + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,true));
+                            }
+                        }
+
                     }
                 }
-                double exponential =
-                        ForecastingMethods.exponentialSmoothing(dataset2forecast,false,false,false);
-                double doubleExponential =
-                        ForecastingMethods.doubleExponential(dataset2forecast,false,false,false);
-                double regression =
-                        ForecastingMethods.regressionAnalysis(dataset2forecast,false,false,false);
-                double deseasonalized =
-                        ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,false);
-                double best_method = Arrays.stream(new double[]{exponential,doubleExponential,regression,deseasonalized}).min()
-                        .getAsDouble();
-
-                for(int method =1;method<5;method++){
-                    if(method==1){
-                        System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
-                    }else if(method ==2){
-                        System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
-                    }else if(method ==3){
-                        System.out.println("\nMSE of Regression Analysis : "+ regression);
-                    }else {
-                        System.out.println("\nMSE of Deseasonalized Regression Analysis : "+ deseasonalized);
-                }
-            }if(best_method==exponential){
-                    System.out.println("\nBased on the MSE comparisons, the best method for this data is Exponential Smoothing Method with value "+exponential);
-                    ForecastingMethods.exponentialSmoothing(dataset2forecast,true,false,false);
-                }else if(best_method==doubleExponential){
-                    System.out.println("\nBased on the MSE comparisons, the best method for this data is Double-Exponential Smoothing Method with value "+doubleExponential);
-                    ForecastingMethods.doubleExponential(dataset2forecast,true,false,false);
-                }else if(best_method == regression){
-                    System.out.println("\nBased on the MSE comparisons, the best method for this data is Regression Analysis with value "+ regression);
-                    ForecastingMethods.regressionAnalysis(dataset2forecast,true,false,false);
+                else if(choice==11){
+                    System.out.println("Exiting...");
+                    break;
                 }else{
-                    System.out.println("\nBased on the MSE comparisons, the best method for this data is Deseasonalized Regression Analysis with value "+ deseasonalized);
-                    ForecastingMethods.deseasonalizedRegression(dataset2forecast,true,false,false);
+                    System.out.println("You entered wrong operation.");
                 }
+            }catch (Exception e){
+                System.out.println("Error occurred. Please try again.");
 
-            }else if(choice==10){
-                System.out.println("\nSelect the dataset.");
-                for (LinkedList dataset : datasets) {
-                    System.out.println("-Dataset " + dataset.id);
-                }System.out.print("\n--->");
-                int selected = input.nextInt();
-                LinkedList dataset2forecast = null;
-                for(LinkedList dataset: datasets){
-                    if(selected == dataset.id){
-                        dataset2forecast = dataset;
-                    }
-                }
-                for(int method =1;method<5;method++){
-                    if(method==1){
-                        System.out.println("\nMinimum Forecasted Sales Number of Exponential Smoothing Method : "
-                                + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,true,false));
-                        System.out.println("\nMaximum Forecasted Sales Number of Exponential Smoothing Method : "
-                                + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,false,true));
-                    }else if(method ==2){
-                        System.out.println("\nMinimum Forecasted Sales Number of Double-Exponential Smoothing Method : "
-                                + ForecastingMethods.doubleExponential(dataset2forecast,false,true,false));
-                        System.out.println("\nMaximum Forecasted Sales Number of Double-Exponential Smoothing Method : "
-                                + ForecastingMethods.doubleExponential(dataset2forecast,false,false,true));
-                    }else if(method ==3){
-                        System.out.println("\nMinimum Forecasted Sales Number of Regression Analysis : "
-                                + ForecastingMethods.regressionAnalysis(dataset2forecast,false,true,false));
-                        System.out.println("\nMaximum Forecasted Sales Number of Regression Analysis : "
-                                + ForecastingMethods.regressionAnalysis(dataset2forecast,false,false,true));
-                    }else {
-                        System.out.println("\nMinimum Forecasted Sales Number of Deseasonalized Regression Analysis : "
-                                + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,true,false));
-                        System.out.println("\nMaximum Forecasted Sales Number of Deseasonalized Regression Analysis : "
-                                + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,true));
-                    }
+                input.nextLine();
             }
             }
-            else if(choice==11){
-                System.out.println("Exiting...");
-                break;
-            }
-        }
+
 
     }
 }
