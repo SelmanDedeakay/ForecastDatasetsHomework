@@ -29,13 +29,10 @@ public class LinkedList {
             }
         }
 
-        // **************INSERTION**************
-
-        // Method to insert a new node
         public void insert(LinkedList list,
                                         int[] values,int year,int month)
         {
-            // Create a new node with given data
+
             Node new_node = new Node(values,year,month);
             new_node.next = null;
 
@@ -63,9 +60,6 @@ public class LinkedList {
             list.head = new_node;
         }
 
-        // **************TRAVERSAL**************
-
-        // Method to print the LinkedList.
         public void printList(LinkedList list,boolean reverse)
         {
             int lastYear=0;
@@ -90,10 +84,7 @@ public class LinkedList {
                 return;
             }
 
-            // Traverse through the LinkedList
             while (currNode != null) {
-                // Print the data at current node
-
                 if(currNode.year!= lastYear){
                     System.out.println("\nYEAR "+currNode.year+"\n");
                 }System.out.print(new DatasetHandler().getMonths().get(currNode.month) + ": ");
@@ -104,10 +95,6 @@ public class LinkedList {
                 if(++temp%3==0){
                     System.out.println("\n");
                 }
-
-
-
-                // Go to next node
                 lastYear= currNode.year;
                 currNode = currNode.next;
 

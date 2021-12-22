@@ -132,7 +132,6 @@ public class Main {
                         System.out.println("\nNo datasets available.\n");
                     } else {
                         int deleted = selectDataset(datasets,input,dataset_ids);
-
                             for(int i = 0;i< datasets.size();i++){
                                 if(deleted == datasets.get(i).id){
                                     datasets.remove(i);
@@ -225,18 +224,16 @@ public class Main {
                                 ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,false);
                         double best_method = Arrays.stream(new double[]{exponential,doubleExponential,regression,deseasonalized}).min()
                                 .getAsDouble();
+                        /*
+                        switch case
 
-                        for(int method =1;method<5;method++){
-                            if(method==1){
-                                System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
-                            }else if(method ==2){
-                                System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
-                            }else if(method ==3){
-                                System.out.println("\nMSE of Regression Analysis : "+ regression);
-                            }else {
-                                System.out.println("\nMSE of Deseasonalized Regression Analysis : "+ deseasonalized);
-                            }
-                        }if(best_method==exponential){
+
+                         */
+                        System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
+                        System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
+                        System.out.println("\nMSE of Regression Analysis : "+ regression);
+                        System.out.println("\nMSE of Deseasonalized Regression Analysis : "+ deseasonalized);
+                        if(best_method==exponential){
                             System.out.println("\nBased on the MSE comparisons, the best method for this data is Exponential Smoothing Method with value "+exponential);
                             ForecastingMethods.exponentialSmoothing(dataset2forecast,true,false,false);
                         }else if(best_method==doubleExponential){
@@ -257,31 +254,28 @@ public class Main {
                                 dataset2forecast = dataset;
                             }
                         }
-                        for(int method =1;method<5;method++){
-                            if(method==1){
-                                System.out.println("\nMinimum Forecasted Sales Number of Exponential Smoothing Method : "
-                                        + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,true,false));
-                                System.out.println("\nMaximum Forecasted Sales Number of Exponential Smoothing Method : "
-                                        + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,false,true));
-                            }else if(method ==2){
-                                System.out.println("\nMinimum Forecasted Sales Number of Double-Exponential Smoothing Method : "
-                                        + ForecastingMethods.doubleExponential(dataset2forecast,false,true,false));
-                                System.out.println("\nMaximum Forecasted Sales Number of Double-Exponential Smoothing Method : "
-                                        + ForecastingMethods.doubleExponential(dataset2forecast,false,false,true));
-                            }else if(method ==3){
-                                System.out.println("\nMinimum Forecasted Sales Number of Regression Analysis : "
-                                        + ForecastingMethods.regressionAnalysis(dataset2forecast,false,true,false));
-                                System.out.println("\nMaximum Forecasted Sales Number of Regression Analysis : "
-                                        + ForecastingMethods.regressionAnalysis(dataset2forecast,false,false,true));
-                            }else {
-                                System.out.println("\nMinimum Forecasted Sales Number of Deseasonalized Regression Analysis : "
-                                        + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,true,false));
-                                System.out.println("\nMaximum Forecasted Sales Number of Deseasonalized Regression Analysis : "
-                                        + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,true));
-                            }
-                        }
 
-                    }
+                    System.out.println("\nMinimum Forecasted Sales Number of Exponential Smoothing Method : "
+                            + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,true,false));
+                    System.out.println("\nMaximum Forecasted Sales Number of Exponential Smoothing Method : "
+                            + ForecastingMethods.exponentialSmoothing(dataset2forecast,false,false,true));
+
+                    System.out.println("\nMinimum Forecasted Sales Number of Double-Exponential Smoothing Method : "
+                            + ForecastingMethods.doubleExponential(dataset2forecast,false,true,false));
+                    System.out.println("\nMaximum Forecasted Sales Number of Double-Exponential Smoothing Method : "
+                            + ForecastingMethods.doubleExponential(dataset2forecast,false,false,true));
+
+                    System.out.println("\nMinimum Forecasted Sales Number of Regression Analysis : "
+                            + ForecastingMethods.regressionAnalysis(dataset2forecast,false,true,false));
+                    System.out.println("\nMaximum Forecasted Sales Number of Regression Analysis : "
+                            + ForecastingMethods.regressionAnalysis(dataset2forecast,false,false,true));
+
+                    System.out.println("\nMinimum Forecasted Sales Number of Deseasonalized Regression Analysis : "
+                            + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,true,false));
+                    System.out.println("\nMaximum Forecasted Sales Number of Deseasonalized Regression Analysis : "
+                            + ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,true));
+
+                        }
                 else if(choice==11){
                     System.out.println("Exiting...");
                     break;
@@ -290,12 +284,9 @@ public class Main {
                 }
             }catch (Exception e){
                 System.out.println("Error occurred. Please try again.");
-
                 input.nextLine();
             }
             }
-
-
     }
 }
 

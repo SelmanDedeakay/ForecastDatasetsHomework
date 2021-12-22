@@ -3,6 +3,22 @@ package com.company;
 import java.util.Arrays;
 
 public class ForecastingMethods {
+
+    public static double printForecasts(LinkedList forecasts,double[] ForecastsTable,boolean forecast,boolean min,boolean max){
+        if(forecast){
+            System.out.println("""
+                        
+                        *******************************
+                        EXPECTED SALES FOR NEXT 2 YEARS:
+                        *******************************
+                        """);
+            forecasts.printList(forecasts,false);
+        }if(min){
+            return Arrays.stream(ForecastsTable).min().getAsDouble();
+        }else if(max){
+            return Arrays.stream(ForecastsTable).max().getAsDouble();
+        }return 0;
+    }
     public static double exponentialSmoothing(LinkedList dataset,boolean forecast,boolean min,boolean max){
         LinkedList.Node temp = dataset.head;
         double[] MSE = new double[24];
@@ -24,19 +40,7 @@ public class ForecastingMethods {
                 lastDemand= Arrays.stream(temp.values).sum();
             }
 
-        }if(forecast){
-            System.out.println("""
-                        
-                        *******************************
-                        EXPECTED SALES FOR NEXT 2 YEARS:
-                        *******************************
-                        """);
-            forecasts.printList(forecasts,false);
-        }if(min){
-            return Arrays.stream(ForecastsTable).min().getAsDouble();
-        }else if(max){
-            return Arrays.stream(ForecastsTable).max().getAsDouble();
-        }
+        }printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum()/24;
     }
     public static double doubleExponential(LinkedList dataset,boolean forecast,boolean min,boolean max){
@@ -68,19 +72,7 @@ public class ForecastingMethods {
                 lastDemand= Arrays.stream(temp.values).sum();
             }ST= lastST;
             GT=lastGT;
-        }if(forecast){
-            System.out.println("""
-                        
-                        *******************************
-                        EXPECTED SALES FOR NEXT 2 YEARS:
-                        *******************************
-                        """);
-            forecasts.printList(forecasts,false);
-        }if(min){
-            return Arrays.stream(ForecastsTable).min().getAsDouble();
-        }else if(max){
-            return Arrays.stream(ForecastsTable).max().getAsDouble();
-        }
+        }printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum()/24;
     }
     public static double regressionAnalysis(LinkedList dataset,boolean forecast,boolean min,boolean max){
@@ -117,19 +109,7 @@ public class ForecastingMethods {
                         *(Arrays.stream(temp.values).sum()-(a+(i+1)*b)))/24;
             temp= temp.next;
          }
-        if(forecast){
-            System.out.println("""
-                        
-                        *******************************
-                        EXPECTED SALES FOR NEXT 2 YEARS:
-                        *******************************
-                        """);
-            forecasts.printList(forecasts,false);
-        }if(min){
-            return Arrays.stream(ForecastsTable).min().getAsDouble();
-        }else if(max){
-            return Arrays.stream(ForecastsTable).max().getAsDouble();
-        }
+        printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum();
     }
 
@@ -173,7 +153,6 @@ public class ForecastingMethods {
             temp=temp.next;
         }
 
-
         temp=dataset.head;
 
         for(int i=1;i<25;i++){
@@ -188,8 +167,6 @@ public class ForecastingMethods {
 
         double a = y-b*x;
 
-
-
         for(int i=0;i<24;i++){
 
             seasonal_regressions[i] = (a+(i+1)*b)
@@ -203,21 +180,7 @@ public class ForecastingMethods {
             temp=temp.next;
         }
 
-        if(forecast){
-            System.out.println("""
-                        
-                        *******************************
-                        EXPECTED SALES FOR NEXT 2 YEARS
-                        *******************************
-                        """);
-            forecasts.printList(forecasts,false);
-        }
-        if(min){
-            return Arrays.stream(seasonal_regressions).min().getAsDouble();
-        }else if(max){
-            return Arrays.stream(seasonal_regressions).max().getAsDouble();
-        }
-
+        printForecasts(forecasts,seasonal_regressions,forecast,min,max);
         return Arrays.stream(MSE).sum();
     }
 }
