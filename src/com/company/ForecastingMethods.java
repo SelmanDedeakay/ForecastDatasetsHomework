@@ -40,7 +40,7 @@ public class ForecastingMethods {
                 lastDemand= Arrays.stream(temp.values).sum();
             }
 
-        }printForecasts(forecasts,ForecastsTable,forecast,min,max);
+        }if(forecast||max||min) return printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum()/24;
     }
     public static double doubleExponential(LinkedList dataset,boolean forecast,boolean min,boolean max){
@@ -72,7 +72,7 @@ public class ForecastingMethods {
                 lastDemand= Arrays.stream(temp.values).sum();
             }ST= lastST;
             GT=lastGT;
-        }printForecasts(forecasts,ForecastsTable,forecast,min,max);
+        }if(forecast||max||min) return printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum()/24;
     }
     public static double regressionAnalysis(LinkedList dataset,boolean forecast,boolean min,boolean max){
@@ -109,7 +109,8 @@ public class ForecastingMethods {
                         *(Arrays.stream(temp.values).sum()-(a+(i+1)*b)))/24;
             temp= temp.next;
          }
-        printForecasts(forecasts,ForecastsTable,forecast,min,max);
+        if(forecast||max||min) return printForecasts(forecasts,ForecastsTable,forecast,min,max);
+
         return Arrays.stream(MSE).sum();
     }
 
@@ -179,8 +180,7 @@ public class ForecastingMethods {
                     /24;
             temp=temp.next;
         }
-
-        printForecasts(forecasts,seasonal_regressions,forecast,min,max);
+        if(forecast||max||min) return printForecasts(forecasts,seasonal_regressions,forecast,min,max);
         return Arrays.stream(MSE).sum();
     }
 }

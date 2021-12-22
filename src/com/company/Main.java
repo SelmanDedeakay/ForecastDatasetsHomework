@@ -224,11 +224,7 @@ public class Main {
                                 ForecastingMethods.deseasonalizedRegression(dataset2forecast,false,false,false);
                         double best_method = Arrays.stream(new double[]{exponential,doubleExponential,regression,deseasonalized}).min()
                                 .getAsDouble();
-                        /*
-                        switch case
 
-
-                         */
                         System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
                         System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
                         System.out.println("\nMSE of Regression Analysis : "+ regression);
