@@ -110,12 +110,12 @@ public class DatasetHandler {
         map.put(max,max_month);
         return map;
     }
-    public void listDatasets(ArrayList<LinkedList> datasets){
+    public void listDatasets(Map<LinkedList, Integer> datasets){
         if(datasets.isEmpty()){
             System.out.println("\nNo datasets available.\n");
             return;
         }
-        for(LinkedList lst: datasets){
+        for(LinkedList lst: datasets.keySet()){
             System.out.println("\nDataset "+ lst.id);
             lst.printList(lst,false);
 
