@@ -134,6 +134,14 @@ public class LinkedList {
                 sums[i]= Arrays.stream(temp.values).sum();
                 temp=temp.next;
             }return sums;
+    }public int size(LinkedList dataset){
+        int count =0;
+        LinkedList.Node temp = dataset.head;
+        while(temp!=null){
+            count++;
+            temp = temp.next;
+        }
+        return count;
     }
 }
 

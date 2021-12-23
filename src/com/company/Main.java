@@ -97,7 +97,7 @@ public class Main {
         int dataset_number = 3;
         Scanner input =new Scanner(System.in);
         DatasetHandler handler = new DatasetHandler();
-        Map<LinkedList,Integer> datasets = new HashMap<>();
+        LinkedHashMap<LinkedList,Integer> datasets = new LinkedHashMap<>();
         LinkedList dataset1 = new LinkedList(1);
         LinkedList dataset2 = new LinkedList(2);
         datasets.put(dataset1,dataset1.id);
