@@ -183,56 +183,36 @@ public class Main {
                 }
                 else if(choice==9){
                     LinkedList selected = selectDataset(datasets,input);
-                    double exponential =
-                            ForecastingMethods.exponentialSmoothing(selected,false,false,false);
-                    double doubleExponential =
-                            ForecastingMethods.doubleExponential(selected,false,false,false);
-                    double regression =
-                            ForecastingMethods.regressionAnalysis(selected,false,false,false);
-                    double deseasonalized =
-                            ForecastingMethods.deseasonalizedRegression(selected,false,false,false);
-                    double best_method = Arrays.stream(new double[]{exponential,doubleExponential,regression,deseasonalized}).min()
-                            .getAsDouble();
+                    System.out.print("""
+                                        Would you like to see forecasts in descending order?
+                                        (1-YES,2-NO)
+                                        
+                                        --->""");
+                    int descending = input.nextInt();
+                    ForecastingMethods.chooseBestMethod(selected, descending == 1);
 
-                    System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
-                    System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
-                    System.out.println("\nMSE of Regression Analysis : "+ regression);
-                    System.out.println("\nMSE of Deseasonalized Regression Analysis : "+ deseasonalized);
-                    if(best_method==exponential){
-                        System.out.println("\nBased on the MSE comparisons, the best method for this data is Exponential Smoothing Method with value "+exponential);
-                        ForecastingMethods.exponentialSmoothing(selected,true,false,false);
-                    }else if(best_method==doubleExponential){
-                        System.out.println("\nBased on the MSE comparisons, the best method for this data is Double-Exponential Smoothing Method with value "+doubleExponential);
-                        ForecastingMethods.doubleExponential(selected,true,false,false);
-                    }else if(best_method == regression){
-                        System.out.println("\nBased on the MSE comparisons, the best method for this data is Regression Analysis with value "+ regression);
-                        ForecastingMethods.regressionAnalysis(selected,true,false,false);
-                    }else{
-                        System.out.println("\nBased on the MSE comparisons, the best method for this data is Deseasonalized Regression Analysis with value "+ deseasonalized);
-                        ForecastingMethods.deseasonalizedRegression(selected,true,false,false);
-                    }
                 }else if(choice==10){
                     LinkedList selected = selectDataset(datasets,input);
 
                     System.out.println("\nMinimum Forecasted Sales Number of Exponential Smoothing Method : "
-                            + ForecastingMethods.exponentialSmoothing(selected,false,true,false));
+                            + ForecastingMethods.exponentialSmoothing(selected,false,true,false,false));
                     System.out.println("\nMaximum Forecasted Sales Number of Exponential Smoothing Method : "
-                            + ForecastingMethods.exponentialSmoothing(selected,false,false,true));
+                            + ForecastingMethods.exponentialSmoothing(selected,false,false,true,false));
 
                     System.out.println("\nMinimum Forecasted Sales Number of Double-Exponential Smoothing Method : "
-                            + ForecastingMethods.doubleExponential(selected,false,true,false));
+                            + ForecastingMethods.doubleExponential(selected,false,true,false,false));
                     System.out.println("\nMaximum Forecasted Sales Number of Double-Exponential Smoothing Method : "
-                            + ForecastingMethods.doubleExponential(selected,false,false,true));
+                            + ForecastingMethods.doubleExponential(selected,false,false,true,false));
 
                     System.out.println("\nMinimum Forecasted Sales Number of Regression Analysis : "
-                            + ForecastingMethods.regressionAnalysis(selected,false,true,false));
+                            + ForecastingMethods.regressionAnalysis(selected,false,true,false,false));
                     System.out.println("\nMaximum Forecasted Sales Number of Regression Analysis : "
-                            + ForecastingMethods.regressionAnalysis(selected,false,false,true));
+                            + ForecastingMethods.regressionAnalysis(selected,false,false,true,false));
 
                     System.out.println("\nMinimum Forecasted Sales Number of Deseasonalized Regression Analysis : "
-                            + ForecastingMethods.deseasonalizedRegression(selected,false,true,false));
+                            + ForecastingMethods.deseasonalizedRegression(selected,false,true,false,false));
                     System.out.println("\nMaximum Forecasted Sales Number of Deseasonalized Regression Analysis : "
-                            + ForecastingMethods.deseasonalizedRegression(selected,false,false,true));
+                            + ForecastingMethods.deseasonalizedRegression(selected,false,false,true,false));
 
                         }
                 else if(choice==11){

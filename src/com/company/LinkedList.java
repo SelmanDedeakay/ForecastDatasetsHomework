@@ -143,5 +143,37 @@ public class LinkedList {
         }
         return count;
     }
+
+    public void insertDescending(int[] values,int year,int month)
+    {
+        Node node = new Node(values,year,month);
+
+        if (head == null) {
+            head = node;
+            return;
+        } else if (Arrays.stream(node.values).sum() > Arrays.stream(head.values).sum()) {
+            node.next = head;
+            head = node;
+            return;
+        }
+        Node p = head;
+
+        boolean added=false;
+        while (p.next != null)
+        {
+            if (Arrays.stream(p.next.values).sum() < Arrays.stream(values).sum())
+            {
+                node.next = p.next;
+                p.next = node;
+                added = true;
+                break;
+            }
+            p = p.next;
+        }
+        if (!added)
+            p.next = node;
+    }public void clearList(){
+            head=null;
+    }
 }
 

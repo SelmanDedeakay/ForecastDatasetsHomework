@@ -3,7 +3,40 @@ package com.company;
 import java.util.Arrays;
 
 public class ForecastingMethods {
+    static LinkedList forecasts = new LinkedList(0);
 
+    public static void chooseBestMethod(LinkedList selected,boolean descending){
+
+        double exponential =
+                ForecastingMethods.exponentialSmoothing(selected,false,false,false,descending);
+        double doubleExponential =
+                ForecastingMethods.doubleExponential(selected,false,false,false,descending);
+        double regression =
+                ForecastingMethods.regressionAnalysis(selected,false,false,false,descending);
+        double deseasonalized =
+                ForecastingMethods.deseasonalizedRegression(selected,false,false,false,descending);
+
+        double best_method = Arrays.stream(new double[]{exponential,doubleExponential,regression,deseasonalized}).min()
+                .getAsDouble();
+
+        System.out.println("\nMSE of Exponential Smoothing Method : "+ exponential);
+        System.out.println("\nMSE of Double-Exponential Smoothing Method : "+ doubleExponential);
+        System.out.println("\nMSE of Regression Analysis : "+ regression);
+        System.out.println("\nMSE of Deseasonalized Regression Analysis : "+ deseasonalized);
+        if(best_method==exponential){
+            System.out.println("\nBased on the MSE comparisons, the best method for this data is Exponential Smoothing Method with value "+exponential);
+            ForecastingMethods.exponentialSmoothing(selected,true,false,false,descending);
+        }else if(best_method==doubleExponential){
+            System.out.println("\nBased on the MSE comparisons, the best method for this data is Double-Exponential Smoothing Method with value "+doubleExponential);
+            ForecastingMethods.doubleExponential(selected,true,false,false,descending);
+        }else if(best_method == regression){
+            System.out.println("\nBased on the MSE comparisons, the best method for this data is Regression Analysis with value "+ regression);
+            ForecastingMethods.regressionAnalysis(selected,true,false,false,descending);
+        }else{
+            System.out.println("\nBased on the MSE comparisons, the best method for this data is Deseasonalized Regression Analysis with value "+ deseasonalized);
+            ForecastingMethods.deseasonalizedRegression(selected,true,false,false,descending);
+        }
+    }
     public static double printForecasts(LinkedList forecasts,double[] ForecastsTable,boolean forecast,boolean min,boolean max){
         if(forecast){
             System.out.println("""
@@ -13,26 +46,28 @@ public class ForecastingMethods {
                         *******************************
                         """);
             forecasts.printList(forecasts,false);
+            forecasts.clearList();
         }if(min){
             return Arrays.stream(ForecastsTable).min().getAsDouble();
         }else if(max){
             return Arrays.stream(ForecastsTable).max().getAsDouble();
         }return 0;
     }
-    public static double exponentialSmoothing(LinkedList dataset,boolean forecast,boolean min,boolean max){
+    public static double exponentialSmoothing(LinkedList dataset,boolean forecast,boolean min,boolean max,boolean descending){
         LinkedList.Node temp = dataset.head;
         double[] MSE = new double[dataset.size(dataset)];
         double lastDemand = Arrays.stream(temp.values).sum();
         double lastForecast = lastDemand;
         double[] ForecastsTable= new double[dataset.size(dataset)];
-        LinkedList forecasts = new LinkedList(0);
 
         for(int i=0;i<dataset.size(dataset);i++){
             MSE[i] = (lastDemand-lastForecast)*(lastDemand-lastForecast);
             double Forecast = 0.2*lastDemand+0.8*lastForecast;
             ForecastsTable[i] = Forecast;
             lastForecast = Forecast;
-            if(forecast){
+            if(forecast&&descending){
+                forecasts.insertDescending(new int[]{(int)Forecast},temp.year, temp.month);
+            }else if(forecast){
                 forecasts.insert(forecasts,new int[]{(int)Forecast},temp.year, temp.month);
             }
             temp=temp.next;
@@ -43,9 +78,8 @@ public class ForecastingMethods {
         }if(forecast||max||min) return printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum()/24;
     }
-    public static double doubleExponential(LinkedList dataset,boolean forecast,boolean min,boolean max){
+    public static double doubleExponential(LinkedList dataset,boolean forecast,boolean min,boolean max,boolean descending){
         LinkedList.Node temp = dataset.head;
-        LinkedList forecasts = new LinkedList(0);
         double[] MSE = new double[dataset.size(dataset)];
         double lastDemand = Arrays.stream(temp.values).sum();
         double Forecast;
@@ -63,7 +97,9 @@ public class ForecastingMethods {
             lastGT = 0.2*(lastST-ST)+0.8*GT;
             Forecast = ST+GT;
             ForecastsTable[i] = Forecast;
-            if(forecast){
+            if(forecast&&descending){
+                forecasts.insertDescending(new int[]{(int)Forecast},temp.year, temp.month);
+            }else if(forecast){
                 forecasts.insert(forecasts,new int[]{(int)Forecast},temp.year, temp.month);
             }
             MSE[i] = (lastDemand-Forecast)*(lastDemand-Forecast);
@@ -75,9 +111,8 @@ public class ForecastingMethods {
         }if(forecast||max||min) return printForecasts(forecasts,ForecastsTable,forecast,min,max);
         return Arrays.stream(MSE).sum()/dataset.size(dataset);
     }
-    public static double regressionAnalysis(LinkedList dataset,boolean forecast,boolean min,boolean max){
+    public static double regressionAnalysis(LinkedList dataset,boolean forecast,boolean min,boolean max,boolean descending){
         double total = dataset.sumOfElements(dataset);
-        LinkedList forecasts = new LinkedList(0);
         double[] MSE = new double[dataset.size(dataset)];
         double[] ForecastsTable= new double[dataset.size(dataset)];
         double y = total/dataset.size(dataset);
@@ -102,8 +137,10 @@ public class ForecastingMethods {
         temp = dataset.head;
         for(int i=0;i<dataset.size(dataset);i++){
             ForecastsTable[i] = a+(i+1)*b;
-            if(forecast){
-                forecasts.insert(forecasts,new int[]{(int)(a+(i+1)*b)},temp.year, temp.month);
+            if(forecast&&descending){
+                forecasts.insertDescending(new int[]{(int)ForecastsTable[i]},temp.year, temp.month);
+            }else if(forecast){
+                forecasts.insert(forecasts,new int[]{(int)ForecastsTable[i]},temp.year, temp.month);
             }
             MSE[i] = ((Arrays.stream(temp.values).sum()-(a+(i+1)*b))
                         *(Arrays.stream(temp.values).sum()-(a+(i+1)*b)))/dataset.size(dataset);
@@ -114,9 +151,8 @@ public class ForecastingMethods {
         return Arrays.stream(MSE).sum();
     }
 
-    public static double deseasonalizedRegression(LinkedList dataset,boolean forecast,boolean min,boolean max){
+    public static double deseasonalizedRegression(LinkedList dataset,boolean forecast,boolean min,boolean max,boolean descending){
         LinkedList.Node temp = dataset.head;
-        LinkedList forecasts = new LinkedList(0);
         double[] MSE = new double[dataset.size(dataset)];
 
         double sum = dataset.sumOfElements(dataset);
@@ -172,7 +208,9 @@ public class ForecastingMethods {
 
             seasonal_regressions[i] = (a+(i+1)*b)
                     *period_factors[i];
-            if(forecast){
+            if(forecast&&descending){
+                forecasts.insertDescending(new int[]{(int)seasonal_regressions[i]},temp.year, temp.month);
+            }else if(forecast){
                 forecasts.insert(forecasts,new int[]{(int)seasonal_regressions[i]},temp.year, temp.month);
             }
             MSE[i] = (seasonal_regressions[i]- Arrays.stream(temp.values).sum())
